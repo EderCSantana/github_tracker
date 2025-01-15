@@ -5,32 +5,6 @@ from db import load_events, save_events
 
 GITHUB_API = "https://api.github.com/repos"
 
-# Version for one repo
-# #get the token in https://github.com/settings/personal-access-tokens
-# def fetch_events(owner, repo, token):
-#     """
-#     Get events from a github repository as long we have their details
-    
-#     Args:
-#         owner (str): Name of the owner. 
-#         repo (str): Name the repository.
-#         token (str): Github access token.
-
-#     Returns:
-#         list: Lista de eventos do repositório.
-#     """
-    
-#     url = f"{GITHUB_API}/{owner}/{repo}/events" #concatenate the owner and repository in the url
-#     headers = {"Authorization": f"token {token}"} #create header to our GET 
-    
-#     try:
-#         response = requests.get(url, headers=headers)
-#         response.raise_for_status()  #gives error if the answer has some error
-#         return response.json()  # Return list of events in a json format
-#     except requests.exceptions.RequestException as e:
-#         print(f"Error to access the API. Check if the requirements are ok: {e}")
-#         return []
-
 # For more repo
 def fetch_events(repo_list, github_token, per_page=100):
     """
@@ -84,74 +58,6 @@ def filter_recent_events(events, days, max_events):
             recent_events.append(event)
 
     return recent_events
-
-
-# def calculate_event_avg_time(events):
-#     """
-#     Calculate avg time between events group by type and repository
-
-#     Args:
-#         events (list): List with events.
-
-#     Returns:
-#         dict: Avg time between eventd by type and repository
-#     """
-#     avg_time = defaultdict(list)
-    
-#     # Order events by date
-#     events.sort(key=lambda e: datetime.strptime(e['created_at'], "%Y-%m-%dT%H:%M:%SZ"))
-    
-#     # CaCalculate time between events
-#     for i in range(1, len(events)):
-#         event = events[i]
-#         prev_event = events[i - 1]
-        
-#         # CCalculate time difference (current and previous time)
-#         curr_time = datetime.strptime(event['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-#         prev_time = datetime.strptime(prev_event['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-#         time_diff = (curr_time - prev_time).total_seconds()
-        
-#         # list and group by type and repository (cictionary of tuples and numnber (time diff))
-#         avg_time[(event['type'], event['repo']['name'])].append(time_diff)
-    
-#     # Calculate and return avg. key[0] is type, key[1] is repository
-#     # it get the sum of all times, and the number of evnts, take the averege
-    
-#     return {
-#         f"{key[0]} - {key[1]}": sum(times) / len(times) if times else 0
-#         for key, times in avg_time.items()
-#     }
-
-# version 1 repo
-# def calculate_event_avg_time(events):
-#     """
-#     Calculate average time between events grouped by type and repository.
-
-#     Args:
-#         events (list): List of events from multiple repositories.
-
-#     Returns:
-#         dict: Statistics as { "EventType - RepoName": AverageTimeInSeconds }.
-#     """
-#     grouped_events = {}
-#     for event in events:
-#         key = f"{event['type']} - {event['repo']['name']}"
-#         if key not in grouped_events:
-#             grouped_events[key] = []
-#         grouped_events[key].append(event)
-
-#     avg_time = {}
-#     for key, group in grouped_events.items():
-#         sorted_group = sorted(group, key=lambda x: x['created_at'])
-#         time_differences = []
-#         for i in range(1, len(sorted_group)):
-#             time_diff = datetime.strptime(sorted_group[i]['created_at'], "%Y-%m-%dT%H:%M:%SZ") - \
-#                         datetime.strptime(sorted_group[i - 1]['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-#             time_differences.append(time_diff.total_seconds())
-
-#         avg_time[key] = sum(time_differences) / len(time_differences) if time_differences else 0
-
-#     return avg_time
 
 def calculate_event_avg_time(events):
     """

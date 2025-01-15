@@ -6,49 +6,12 @@ from datetime import datetime, timezone
 app = Flask(__name__)
 
 # settings for our 
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = "token"
 # OWNER = "EderCSantana"
 # # REPO = "Beecrowd"
 # # REPO = "forrozeiros-cz "
 # # REPO = "All_42"
 # REPO = "Sync_task"
-
-# version 1 repo
-# @app.route('/api/update', methods=['POST'])
-# def update_events():
-#     """
-#     Update the json with recent events
-#     """
-#     # Load the events we have saved
-#     saved_events = load_events()
-
-#     # find the most recent event
-#     if saved_events:
-#         latest_event_date = max(
-#             datetime.strptime(e['created_at'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-#             for e in saved_events
-#         )
-#     else:
-#         latest_event_date = None
-
-#     # Find new (events made after the latest stored event) events on Github
-#     if latest_event_date:
-#         new_events = fetch_events(OWNER, REPO, GITHUB_TOKEN)
-#         new_events = [
-#             event for event in new_events
-#             if datetime.strptime(event['created_at'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc) > latest_event_date
-#         ]
-#     else:
-#         new_events = fetch_events(OWNER, REPO, GITHUB_TOKEN)
-
-#     # Combine events and remove duplicates (converts in a dictionary adding an ID)
-#     all_events = saved_events + new_events
-#     unique_events = {event['id']: event for event in all_events}.values()
-
-#     # Save the date in the json
-#     save_events(list(unique_events))
-
-#     return jsonify({"message": "Update worked well.", "new_events": len(new_events)})
 
 @app.route('/api/update', methods=['POST'])
 def update_events_api():
@@ -78,20 +41,6 @@ def update_events_api():
     return jsonify(result)
 
 
-
-
-# @app.route('/api/update', methods=['POST'])
-# def update():
-#     repositories = request.json.get("repositories", [])
-#     if not repositories:
-#         return jsonify({"status": "error", "message": "No repositories provided"}), 400
-    
-#     all_events = fetch_events(repositories, GITHUB_TOKEN)
-#     save_events(all_events)
-    
-#     return jsonify({"status": "success", "message": "Events updated successfully.", "new_events": len(all_events)})
-
-
 @app.route('/api/events', methods=['GET'])
 def get_events():
     """
@@ -110,15 +59,6 @@ def get_events():
     filtered_events = filter_recent_events(all_events, days=days, max_events=max_events)
 
     return jsonify(filtered_events)
-
-# @app.route('/api/avgtime', methods=['GET'])
-# def get_event_avg_time():
-#     """
-#     Calculate avg time between events
-#     """
-#     all_events = load_events()
-#     avg_time = calculate_event_avg_time(all_events)
-#     return jsonify(avg_time)
 
 @app.route('/api/avgtime', methods=['GET'])
 def get_event_avg_time():
