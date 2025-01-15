@@ -9,7 +9,7 @@ from app.db import save_events, load_events
 
 # Substitua pelos valores reais
 # GITHUB_TOKEN = "<SEU_TOKEN>"
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = "token"
 OWNER = "EderCSantana"
 # REPO = "Beecrowd"
 # REPO = "forrozeiros-cz "
@@ -42,8 +42,8 @@ print(all_events)
 # Filter events by days and amount
 filtered_events = filter_recent_events(all_events, days=N_DAYS, max_events=MAX_EVENTS)
 
-# Salvar os eventos filtrados
+# save filtered events
 save_events(filtered_events)
 
-# Mostrar resultado
+
 print(f"Número total de eventos armazenados: {len(filtered_events)}")
